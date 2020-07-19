@@ -1,0 +1,14 @@
+packet:
+  capture:
+    server:
+      host: 127.0.0.1
+      port: 59766
+
+iot:
+  platform:
+    bytd:
+      host: 127.0.0.1
+      port: 19300
+    gk:
+      host: 127.0.0.1
+      port: 19310
