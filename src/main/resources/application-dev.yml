@@ -2,7 +2,7 @@ packet:
   capture:
     server:
       host: 127.0.0.1
-      port: 59766
+      port: 51766
 
 iot:
   platform:

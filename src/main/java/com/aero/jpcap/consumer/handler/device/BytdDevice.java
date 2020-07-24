@@ -12,8 +12,12 @@ import io.netty.util.concurrent.GenericFutureListener;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.InetSocketAddress;
+import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author 罗涛
@@ -27,6 +31,8 @@ public class BytdDevice extends ChannelDuplexHandler implements IDevice{
     public static Bootstrap client;
     public static NioEventLoopGroup workers;
     public static InetSocketAddress remoteAddr;
+
+    Map<byte[], AtomicInteger> countMap = new ConcurrentHashMap<>();
 
     private Channel channel;
 
@@ -89,8 +95,8 @@ public class BytdDevice extends ChannelDuplexHandler implements IDevice{
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         log.warn("设备{}与平台断开连接！", this.imei);
-        ctx.close();
         reconnect();
+        ctx.close();
     }
 
     @Override
@@ -124,8 +130,23 @@ public class BytdDevice extends ChannelDuplexHandler implements IDevice{
 
     @Override
     public void send(byte[] msg) {
-        if(Objects.nonNull(channel)){
+        int retry = 0;
+        if(countMap.containsKey(msg)){
+            retry = countMap.get(msg).addAndGet(1);
+        }else {
+            countMap.put(msg, new AtomicInteger(0));
+        }
+        if(Objects.nonNull(channel) && channel.isActive()){
             channel.writeAndFlush(msg);
+        }else {
+            if (retry<3) {
+                workers.schedule(new Runnable() {
+                    @Override
+                    public void run() {
+                        send(msg);
+                    }
+                }, 3, TimeUnit.SECONDS);
+            }
         }
     }
 

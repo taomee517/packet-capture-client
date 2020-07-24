@@ -21,35 +21,35 @@
         </Console>
 
         <!-- 文件 每次运行程序会自动清空，由append属性决定 -->
-        <File name="ERROR" fileName="${FILE_PATH}/${APP_NAME}/sys_error.log" append="false">
-            <!-- 指定error 级别的日志 -->
-            <ThresholdFilter level="ERROR" onMatch="ACCEPT"
-                             onMismatch="DENY" />
-            <PatternLayout>
-                <pattern>${STDOUT_PATTERN}</pattern>
-            </PatternLayout>
-        </File>
+<!--        <File name="ERROR" fileName="${FILE_PATH}/${APP_NAME}/sys_error.log" append="false">-->
+<!--            &lt;!&ndash; 指定error 级别的日志 &ndash;&gt;-->
+<!--            <ThresholdFilter level="ERROR" onMatch="ACCEPT"-->
+<!--                             onMismatch="DENY" />-->
+<!--            <PatternLayout>-->
+<!--                <pattern>${STDOUT_PATTERN}</pattern>-->
+<!--            </PatternLayout>-->
+<!--        </File>-->
 
         <!-- 滚动文件 -->
-        <RollingFile name="ROLLING_FILE" fileName="${FILE_PATH}/${APP_NAME}/sys-info.log"
-                     filePattern="${FILE_PATH}/${APP_NAME}/sys-info-%d{yyyy-MM-dd}.log">
-            <PatternLayout>
-                <pattern>${STDOUT_PATTERN}</pattern>
-            </PatternLayout>
-            <!-- 按大小划分 -->
-            <SizeBasedTriggeringPolicy size="50 MB" />
-        </RollingFile>
+<!--        <RollingFile name="ROLLING_FILE" fileName="${FILE_PATH}/${APP_NAME}/sys-info.log"-->
+<!--                     filePattern="${FILE_PATH}/${APP_NAME}/sys-info-%d{yyyy-MM-dd}.log">-->
+<!--            <PatternLayout>-->
+<!--                <pattern>${STDOUT_PATTERN}</pattern>-->
+<!--            </PatternLayout>-->
+<!--            &lt;!&ndash; 按大小划分 &ndash;&gt;-->
+<!--            <SizeBasedTriggeringPolicy size="50 MB" />-->
+<!--        </RollingFile>-->
 
         <!--输出到kafka-->
-<!--        <Kafka name ="KAFKA" topic="elk-${APP_NAME}" syncSend="false">-->
-<!--            <PatternLayout>-->
-<!--                <pattern>${RDB_PATTERN}</pattern>-->
-<!--            </PatternLayout>-->
-<!--            <Property name ="bootstrap.servers" >192.168.1.154:9092</Property>-->
-<!--            <Property name ="retries">3</Property>-->
-<!--            <Property name ="linger.ms" >1000</Property>-->
-<!--            <Property name ="buffer.memory" > 104857600</Property>-->
-<!--        </Kafka>-->
+        <Kafka name ="KAFKA" topic="elk-${APP_NAME}" syncSend="false">
+            <PatternLayout>
+                <pattern>${RDB_PATTERN}</pattern>
+            </PatternLayout>
+            <Property name ="bootstrap.servers" >192.168.1.154:9092</Property>
+            <Property name ="retries">3</Property>
+            <Property name ="linger.ms" >1000</Property>
+            <Property name ="buffer.memory" > 104857600</Property>
+        </Kafka>
     </Appenders>
     <Loggers>
         <!-- additivity属性作用是在使用当前Logger配置的Appender打印日志 -->
@@ -60,7 +60,7 @@
         <Root level ="INFO" >
             <!--       <AppenderRef ref="ERROR"></AppenderRef>-->
             <!--        <AppenderRef ref="ROLLING_FILE"></AppenderRef>     -->
-<!--            <AppenderRef ref="KAFKA"></AppenderRef>-->
+            <AppenderRef ref="KAFKA"></AppenderRef>
             <AppenderRef ref="STDOUT"></AppenderRef>
         </Root>
     </Loggers>

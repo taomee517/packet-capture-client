@@ -62,6 +62,9 @@ dependencies {
     /**log4j2*/
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-log4j2'
 
+    /**kafka*/
+    compile("org.springframework.kafka:spring-kafka")
+
     // lombok
     compile group: 'org.projectlombok', name: 'lombok'
     annotationProcessor "org.projectlombok:lombok"
